@@ -1,0 +1,14 @@
+<%- include('layout', { title: title }) %>
+<h1>Gallery</h1>
+<div class="grid">
+<% if (items.length === 0) { %>
+<p>No images yet. <a href="/upload">Upload one</a>.</p>
+<% } %>
+<% items.forEach(item => { %>
+<div class="card">
+<img src="<%= item.url %>" alt="<%= item.title %>" style="max-width:300px; height:auto">
+<h4><%= item.title %></h4>
+<small><%= new Date(item.created_at).toLocaleString() %></small>
+</div>
+<% }) %>
+</div>
