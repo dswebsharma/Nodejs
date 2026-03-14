@@ -16,8 +16,14 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/Nodejs
+	    cd /home/ubuntu/Nodejs
             git pull origin main
-            # Rebuild and force exactly 5 replicas
-            docker compose up -d --build --scale app=5
+            
+            # 1. Build the image locally on the EC2 server
+            docker build -t node-app:latest .
+            
+            # 2. Deploy or update the Swarm Stack using the new image
+            docker stack deploy -c docker-compose.yml production_stack
+            
+            # 3. Clean up old images
             docker image prune -f
